@@ -2,9 +2,11 @@
 <h4>index action</h4>
 
 <br>
+Lesson 1
 <?=$test; ?>
 <br>
-<?=$testservice; ?>
+Lesson 2
+<?='testing component; value='.$testservice; ?>
 <br>
 <br>
 

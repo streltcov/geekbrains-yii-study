@@ -14,8 +14,8 @@ $config = [
     ],
     'components' => [
         'test' => [
-            'class' => '\app\components\TestService'::class,
-            'value' => 'test value'
+            'class' => \app\components\TestService::class,
+            'value' => 'from TestService'
         ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation

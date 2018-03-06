@@ -10,9 +10,15 @@ use yii\widgets\ActiveForm;
 
 <div class="product-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['enableClientValidation' => true, 'enableAjaxValidation' => true]); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= /*$form->field($model, 'name')->dropDownList([
+            '111' => 'первый',
+            '222' => 'второй',
+            '333' => 'третий'
+    ]);*/
+    $form->field($model, 'name')->textInput(['maxlength' => true])
+    ?>
 
     <?= $form->field($model, 'price')->textInput(['maxlength' => true]) ?>
 
