@@ -115,6 +115,33 @@ class UserController extends Controller
 
         $notes = new Note();
 
+        $note1 = [
+            'text' => 'note text 1',
+            'created_at' => time()
+        ];
+
+        $note2 = [
+            'text' => 'note text 2',
+            'created_at' => time()
+        ];
+
+        $note3 = [
+            'text' => 'note text3',
+            'created_at' => time()
+        ];
+
+        //$user = (new User())::findOne();
+        $notes->attributes = $note1;
+
+        //VarDumper::dump(get_class_methods($notes));
+        $notes->link('creator', $model);
+        $notes->save();
+
+        $notes2 = new Note();
+        $notes2->attributes = $note2;
+        $notes2->link('creator', $model);
+        $notes2->save();
+
     } // end action
 
 

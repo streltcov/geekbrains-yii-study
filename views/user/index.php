@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>
 
     <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-info']) ?>
     </p>
 
     <?= GridView::widget([
@@ -31,7 +31,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //'access_token',
             //'auth_key',
             //'created_at',
-            //'updated_at',
+            'password',
+            'updated_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

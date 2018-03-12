@@ -22,27 +22,37 @@ AppAsset::register($this);
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
+    <style>
+        body {
+            background-color: #dbd8d5;
+        }
+    </style>
 </head>
+
 <body>
 <?php $this->beginBody() ?>
 
 <div class="wrap">
     <?php
     NavBar::begin([
-        'brandLabel' => Yii::$app->name,
+        //'brandLabel' => Yii::$app->name,
+        'brandLabel' => 'Geekbrains Yii2',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-light',
-            'style' => 'background-color: #e3f2fd;'
+            'class' => 'navbar navbar-default navbar-fixed-top',
+            'style' => 'background-color: #f5f5f5;'
         ],
     ]);
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
+        'options' => [
+                'class' => 'navbar-nav navbar-right'
+        ],
         'items' => [
             ['label' => 'Home', 'url' => ['/site/index']],
             ['label' => 'About', 'url' => ['/site/about']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            ['label' => 'Product', 'url' => ['/product']],
+            ['label' => 'Users', 'url' => ['/user']],
+            ['label' => 'Notes', 'url' => ['/note']],
             ['label' => 'Test', 'url' => ['/test']],
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
@@ -61,7 +71,7 @@ AppAsset::register($this);
     NavBar::end();
     ?>
 
-    <div class="container">
+    <div style="background-color: white;" class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>

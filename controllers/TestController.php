@@ -3,15 +3,22 @@
 namespace app\controllers;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
 use yii\helpers\VarDumper;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models;
+use app\models\User;
 //use app\models\LoginForm;
 //use app\models\ContactForm;
 
+/**
+ * Class TestController
+ * @mixin TimestampBehavior
+ * @package app\controllers
+ */
 class TestController extends Controller
 {
 
@@ -54,26 +61,24 @@ class TestController extends Controller
     {
 
         Yii::$app->db->createCommand()->insert('user', [
-            'username' => 'user1',
+            'username' => 'behaviortest',
             'name' => 'name1',
             'surname' => 'surname1',
             'password_hash' => 'dfg',
             'access_token' => 'access',
-            'created_at' => '123123',
-            'updated_at' => time()
         ])->execute();
 
-        Yii::$app->db->createCommand()->insert('user', [
+        /*Yii::$app->db->createCommand()->insert('user', [
             'username' => 'user2',
             'name' => 'name2',
             'surname' => 'surname2',
             'password_hash' => 'dfg',
             'access_token' => 'access',
-            'created_at' => '235235',
+            //'created_at' => '235235',
             'updated_at' => time()
-        ])->execute();
+        ])->execute();*/
 
-        Yii::$app->db->createCommand()->insert('user', [
+        /*Yii::$app->db->createCommand()->insert('user', [
             'username' => 'user3',
             'name' => 'name3',
             'surname' => 'surname3',
@@ -81,7 +86,7 @@ class TestController extends Controller
             'access_token' => 'access',
             'created_at' => '321321',
             'updated_at' => time()
-        ])->execute();
+        ])->execute();*/
 
         //$ids = (new \yii\db\Query())->select('id')->from('user')->all();
 
@@ -128,5 +133,15 @@ class TestController extends Controller
         VarDumper::dump($notes);
 
     } // end action
+
+    public function actionBehavior()
+    {
+        $model = new User();
+        $model->username = 'behavior';
+        $model->name = 'b_user';
+        $model->surname = 'b_surname';
+        $model->password_hash = 'dfg';
+        $model->save();
+    }
 
 } // end class
