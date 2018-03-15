@@ -4,9 +4,14 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Access;
+use app\models\Note;
+use app\models\User;
+use app\models\UserQuery;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 /**
@@ -20,6 +25,15 @@ class AccessController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -62,16 +76,30 @@ class AccessController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($id)
     {
+
+        $note = Note::findOne($id);
+
+        if (!$note || $note->creator_id !== Yii::$app->user->id) {
+            throw new ForbiddenHttpException('Нет доступа');
+        }
+
         $model = new Access();
 
+        $model->note_id = $id;
+
+        //$users = User::find()->select('username')->andFilterWhere(['<>', 'id', $id])->indexBy('id')->column();
+        $users = UserQuery::exceptOne();
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success','Access created');
+            return $this->redirect(['note/my', 'id' => $model->id]);
         }
 
         return $this->render('create', [
             'model' => $model,
+            'users' => $users
         ]);
     }
 

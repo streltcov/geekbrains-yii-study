@@ -20,8 +20,12 @@ class NoteQuery extends \yii\db\ActiveQuery
      */
     public function all($db = null)
     {
+
         return parent::all($db);
-    }
+
+    } // end function
+
+
 
     /**
      * @inheritdoc
@@ -29,6 +33,18 @@ class NoteQuery extends \yii\db\ActiveQuery
      */
     public function one($db = null)
     {
+
         return parent::one($db);
-    }
-}
+
+    } // end function
+
+
+
+    public function byCreator($userid)
+    {
+
+        return $this->andWhere(['creator_id' => $userid]);
+
+    } // end function
+
+} // end class

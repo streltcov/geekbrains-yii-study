@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Note;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +21,15 @@ class NoteController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -33,16 +43,18 @@ class NoteController extends Controller
      * Lists all Note models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionMy()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Note::find(),
+            'query' => Note::find()->byCreator(Yii::$app->user->id),
         ]);
 
-        return $this->render('index', [
+        return $this->render('my', [
             'dataProvider' => $dataProvider,
         ]);
-    }
+    } // end action
+
+
 
     /**
      * Displays a single Note model.
@@ -55,7 +67,9 @@ class NoteController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
-    }
+    } // end action
+
+
 
     /**
      * Creates a new Note model.
@@ -65,15 +79,19 @@ class NoteController extends Controller
     public function actionCreate()
     {
         $model = new Note();
+        $model->creator_id = Yii::$app->user->id;
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            Yii::$app->session->setFlash('success', 'Note created');
+            return $this->redirect(['my']);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
-    }
+    } // end action
+
+
 
     /**
      * Updates an existing Note model.
@@ -95,19 +113,28 @@ class NoteController extends Controller
         ]);
     }
 
+
     /**
      * Deletes an existing Note model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     * @throws NotFoundHttpException if the model cannot be found
+     * If deletion is successful, the browser will be redirected to the 'index' page
+     *
+     * @param $id
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     * @throws \Exception
+     * @throws \Throwable
+     * @throws \yii\db\StaleObjectException
      */
     public function actionDelete($id)
     {
+
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
-    }
+
+    } // end action
+
+
 
     /**
      * Finds the Note model based on its primary key value.
@@ -118,10 +145,13 @@ class NoteController extends Controller
      */
     protected function findModel($id)
     {
+
         if (($model = Note::findOne($id)) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-}
+
+    } // end function
+
+} // end class
